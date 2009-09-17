@@ -8,16 +8,25 @@
 
 <h2><%= l(:label_customer) %></h2>
 
-<% unless @customer.nil? -%>
-  <div class="box">
-    <p> <%= l(:field_customer_name) %>: <%= h @customer.name %> </p>
-    <p> <%= l(:field_customer_company) %>: <%= h @customer.company %> </p>
-    <p> <%= l(:field_customer_address) %>: <%= h @customer.address %> </p>
-    <p> <%= l(:field_customer_phone) %>: <%= h @customer.phone %> </p>
-    <p> <%= l(:field_customer_email) %>: <%= mail_to @customer.email unless @customer.email.blank? %> </p>
-    <p> <%= l(:field_customer_website) %>: <%= link_to @customer.website unless @customer.website.blank? %> </p>
-    <p> <%= l(:field_customer_skype) %>: <%= @customer.skype_name unless @customer.skype_name.blank? %> </p>
-  </div>
+<% unless @customers.empty? -%>
+  <% @customers.each do |customer| %>
+    <div class="box">
+      <p> 
+        <%= l(:field_customer_name) %>: <%= h customer.name %> 
+        <span class="details-link small-text"> 
+          <%= link_to_function "Details", "$('customer-#{customer.id}').toggle()" %>
+        </span>
+      </p>
+      <span style="display:none;" id="customer-<%=customer.id%>">
+        <p> <%= l(:field_customer_company) %>: <%= h customer.company %> </p>
+        <p> <%= l(:field_customer_address) %>: <%= h customer.address %> </p>
+        <p> <%= l(:field_customer_phone) %>: <%= h customer.phone %> </p>
+        <p> <%= l(:field_customer_email) %>: <%= mail_to customer.email unless customer.email.blank? %> </p>
+        <p> <%= l(:field_customer_website) %>: <%= link_to customer.website unless customer.website.blank? %> </p>
+      </span>
+    </div>
+    <br/><br/>
+  <% end %>
 <% else %>
   <p class="nodata"><%=l(:label_no_data)%></p>
 <% end %>

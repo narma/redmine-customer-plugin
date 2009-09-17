@@ -6,7 +6,7 @@ class CustomersController < ApplicationController
   before_filter :find_customers, :only => [:list, :select]
  
   def show
-    @customer = Customer.find_by_id(@project.customer_id)
+    @customers = @project.customers
   end
   
   def list
@@ -18,8 +18,9 @@ class CustomersController < ApplicationController
   end
   
   def assign
-    @project.customer_id = params[:customer][:id]
-    if @project.save
+    @customer = Customer.find(params[:customer][:id])
+    @customer.project_id = @project.id 
+    if @customer.save
       flash[:notice] = l(:notice_successful_save)
       redirect_to :action => "show", :id => params[:id]
     else
