@@ -1,21 +1,21 @@
 ru:
-  customer_title: Клиент
-  label_customer: Клиент
-  label_customer_plural: Клиенты
-  label_customer_information: Информация клиента
-  label_customer_edit_information: Изменение информации о клиенте
-  label_customer_assign_to_project: Assign Customer to Project
-  label_customer_view: View
-  label_customer_assign: Assign
-  label_customer_list: List
-  label_customer_new: New
-  field_customer_name: Name
-  field_customer_company: Company
-  field_customer_address: Address
-  field_customer_phone: Phone
-  field_customer_email: Email
-  field_customer_website: Website
-  field_customer_skype: Skype
+  client_title: Клиенты
+  label_client: Клиенты
+  label_client_plural: Клиенты
+  label_client_information: Информация клиента
+  label_client_edit_information: Изменение информации о клиенте
+  label_client_assign_to_project: Assign client to Project
+  label_client_view: View
+  label_client_assign: Assign
+  label_client_list: List
+  label_client_new: New
+  field_client_name: Name
+  field_client_company: Company
+  field_client_address: Address
+  field_client_phone: Phone
+  field_client_email: Email
+  field_client_website: Website
+  field_client_skype: Skype
   notice_successful_save: Saved
   notice_unsuccessful_save: Could not save
 

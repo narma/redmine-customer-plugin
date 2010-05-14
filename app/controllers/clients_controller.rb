@@ -1,12 +1,12 @@
-class CustomersController < ApplicationController
+class ClientsController < ApplicationController
   unloadable
   layout 'base'
   before_filter :find_project, :authorize
-  before_filter :find_customer, :only => [:edit, :update, :destroy]
-  before_filter :find_customers, :only => [:list, :select]
+  before_filter :find_client, :only => [:edit, :update, :destroy]
+  before_filter :find_clients, :only => [:list, :select]
 
   def show
-    @customers = @project.customers
+    @clients = @project.clients
   end
 
   def list
@@ -23,7 +23,7 @@ class CustomersController < ApplicationController
 
   def update
     #@customer = Customer.find_by_id(params[:customer_id])
-    if @customer.update_attributes(params[:customer])
+    if @client.update_attributes(params[:client])
       flash[:notice] = l(:notice_successful_update)
       redirect_to :action => "list", :id => params[:id]
     else
@@ -33,7 +33,7 @@ class CustomersController < ApplicationController
 
   def destroy
     #@customer = Customer.find_by_id(params[:customer_id])
-    if @customer.destroy
+    if @client.destroy
       flash[:notice] = l(:notice_successful_delete)
     else
       flash[:error] = l(:notice_unsuccessful_save)
@@ -42,12 +42,12 @@ class CustomersController < ApplicationController
   end
 
   def new
-    @customer = Customer.new
+    @client = Client.new
   end
 
   def create
-    @customer = @project.customers.build(params[:customer])
-    if @customer.save
+    @client = @project.clients.build(params[:client])
+    if @client.save
       flash[:notice] = l(:notice_successful_create)
       redirect_to :action => "select", :id => params[:id]
     else
@@ -63,14 +63,14 @@ class CustomersController < ApplicationController
     render_404
   end
 
-  def find_customer
-    @customer = Customer.find_by_id(params[:customer_id])
+  def find_client
+    @client = Client.find_by_id(params[:client_id])
   rescue ActiveRecord::RecordNotFound
     render_404
   end
 
-  def find_customers
-    @customers = Customer.find(:all) || []
+  def find_clients
+    @clients = Client.find(:all) || []
   end
 
 end

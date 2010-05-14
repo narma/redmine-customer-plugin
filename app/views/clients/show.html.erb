@@ -1,0 +1,37 @@
+<div class="contextual">
+  <%= link_to_if_authorized l(:button_edit), {:controller => 'clients', :action => 'edit', :id => @project, :client_id => @client.id}, :class => 'icon icon-edit' unless @client.nil? %>
+  <%= link_to_if_authorized l(:label_client_view), {:controller => 'clients', :action => 'show', :id => @project}, :class => 'icon icon-user' %>
+  <%= link_to_if_authorized l(:label_client_list), {:controller => 'clients', :action => 'list', :id => @project}, :class => 'icon icon-users' %>
+  <%= link_to_if_authorized l(:label_client_new), {:controller => 'clients', :action => 'new', :id => @project}, :class => 'icon icon-add' %>
+</div>
+
+<h2><%= l(:label_client) %></h2>
+
+<% unless @clients.empty? -%>
+  <% @clients.each do |client| %>
+    <div class="box">
+      <p>
+        <%= l(:field_client_name) %>: <%= h client.name %>
+        <span class="details-link small-text">
+          <%= link_to_function "Details", "$('client-#{client.id}').toggle()" %>
+        </span>
+      </p>
+      <span style="display:none;" id="client-<%=client.id%>">
+        <p> <%= l(:field_client_address) %>: <%= h client.address %> </p>
+        <p> <%= l(:field_client_phone) %>: <%= h client.phone %> </p>
+        <p> <%= l(:field_client_email) %>: <%= mail_to client.email unless client.email.blank? %> </p>
+        <p> <%= l(:field_client_website) %>: <%= link_to client.website unless client.website.blank? %> </p>
+      </span>
+    </div>
+    <br/><br/>
+  <% end %>
+<% else %>
+  <p class="nodata"><%=l(:label_no_data)%></p>
+<% end %>
+
+<% content_for(:header_tags) do %>
+  <style type="text/css">
+    .icon-users { background-image: url(../../images/users.png); }
+  </style>
+<% end %>
+

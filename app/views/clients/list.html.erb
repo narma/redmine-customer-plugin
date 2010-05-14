@@ -1,0 +1,32 @@
+<div class="contextual">
+  <%= link_to_if_authorized l(:label_client_view), {:controller => 'clients', :action => 'show', :id => @project}, :class => 'icon icon-user' %>
+  <%= link_to_if_authorized l(:label_client_list), {:controller => 'clients', :action => 'list', :id => @project}, :class => 'icon icon-users' %>
+  <%= link_to_if_authorized l(:label_client_new), {:controller => 'clients', :action => 'new', :id => @project}, :class => 'icon icon-add' %>
+</div>
+
+<h2><%= l(:label_client_plural) %></h2>
+
+<% unless @clients.empty? %>
+  <table class="list">
+    <% @clients.each do |client| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%= client.name %></td>
+        <td align="right">
+          <small>
+              <%= link_to_if_authorized l(:button_edit), {:controller => 'clients', :action => 'edit', :id => @project, :client_id => client.id}, :class => 'icon icon-edit' %>
+              <%= link_to_if_authorized l(:button_delete), {:controller => 'clients', :action => 'destroy', :id => @project, :client_id => client.id}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' %>
+          </small>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p class="nodata"><%=l(:label_no_data)%></p>
+<% end %>
+
+<% content_for(:header_tags) do %>
+  <style type="text/css">
+    .icon-users { background-image: url(../../images/users.png); }
+  </style>
+<% end %>
+

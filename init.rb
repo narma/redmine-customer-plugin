@@ -1,8 +1,6 @@
 # Redmine customer plugin
 require 'redmine'
 
-require_dependency 'customer_extensions/project'
-
 RAILS_DEFAULT_LOGGER.info 'Starting Customer plugin for RedMine'
 
 Redmine::Plugin.register :customer_plugin do

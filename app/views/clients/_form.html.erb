@@ -1,0 +1,20 @@
+<%= error_messages_for 'client' %>
+
+<div class="box">
+  <p>
+    <%= f.text_field 'name', :label=>l(:field_client_name) -%>
+  </p>
+  <p>
+    <%= f.text_area 'address', :label=>l(:field_client_address), :rows => 5 -%>
+  </p>
+  <p>
+    <%= f.text_field 'phone', :label=>l(:field_client_phone) -%>
+  </p>
+  <p>
+    <%= f.text_field 'email', :label=>l(:field_client_email) -%>
+  </p>
+  <p>
+    <%= f.text_field 'website', :label=>l(:field_client_website) -%>
+  </p>
+</div>
+

@@ -1,17 +1,19 @@
-# Use rake db:migrate_plugins to migrate installed plugins
 class CreateCustomers < ActiveRecord::Migration
   def self.up
     create_table :customers do |t|
-      t.column :name, :string
-      t.column :company, :string
-      t.column :address, :text
+      t.column :client_id, :string
+      t.column :first_name, :string
+      t.column :last_name, :string
       t.column :phone, :string
       t.column :email, :string
-      t.column :website, :string
     end
+
+    add_column :issues, :customer_id, :integer
   end
 
   def self.down
     drop_table :customers
+    remove_column :issues, :customer_id
   end
 end
+
