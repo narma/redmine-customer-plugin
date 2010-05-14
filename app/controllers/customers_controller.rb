@@ -4,11 +4,11 @@ class CustomersController < ApplicationController
   before_filter :find_project, :authorize
   before_filter :find_customer, :only => [:edit, :update, :destroy]
   before_filter :find_customers, :only => [:list, :select]
- 
+
   def show
     @customers = @project.customers
   end
-  
+
   def list
     #@customers = Customer.find(:all)
   end
@@ -16,19 +16,7 @@ class CustomersController < ApplicationController
   def select
     #@customers = Customer.find(:all)
   end
-  
-  def assign
-    @customer = Customer.find(params[:customer][:id])
-    @customer.project_id = @project.id 
-    if @customer.save
-      flash[:notice] = l(:notice_successful_save)
-      redirect_to :action => "show", :id => params[:id]
-    else
-      flash[:notice] = l(:notice_unsuccessful_save)
-      redirect_to :action => "select", :id => params[:id]
-    end
-  end
-    
+
   def edit
     #@customer = Customer.find_by_id(params[:customer_id])
   end
@@ -52,13 +40,13 @@ class CustomersController < ApplicationController
     end
     redirect_to :action => "list", :id => params[:id]
   end
-  
+
   def new
     @customer = Customer.new
   end
 
   def create
-    @customer = Customer.new(params[:customer])
+    @customer = @project.customers.build(params[:customer])
     if @customer.save
       flash[:notice] = l(:notice_successful_create)
       redirect_to :action => "select", :id => params[:id]
@@ -66,9 +54,9 @@ class CustomersController < ApplicationController
       render :action => "new", :id => params[:id]
     end
   end
-  
+
   private
-  
+
   def find_project
     @project = Project.find(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -80,9 +68,10 @@ class CustomersController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render_404
   end
-  
+
   def find_customers
     @customers = Customer.find(:all) || []
   end
 
 end
+

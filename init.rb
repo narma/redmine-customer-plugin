@@ -17,7 +17,6 @@ Redmine::Plugin.register :customer_plugin do
 
   project_module :customer_module do
     permission :view_customer, {:customers => [:show]}
-    permission :assign_customer, {:customers => [:assign, :select]}
     permission :see_customer_list, {:customers => [:list]}
     permission :edit_customer, {:customers => [:edit, :update, :new, :create, :destroy]}
   end
