@@ -2,6 +2,7 @@ class Client < ActiveRecord::Base
 
   belongs_to :project
   has_many :customers, :dependent => :destroy
+  has_many :issues
 
   # name or company is mandatory
   validates_presence_of :name
@@ -10,6 +11,10 @@ class Client < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   #TODO validate website address
   #TODO validate skype_name contact
+
+  def to_s
+    "#{name}"
+  end
 
 end
 

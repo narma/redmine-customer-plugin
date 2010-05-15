@@ -6,6 +6,7 @@ require_dependency 'customer_extensions/project'
 require_dependency 'customer_extensions/issue'
 require_dependency 'customer_extensions/issues_controller_patch'
 require_dependency 'customer_extensions/issues_hook'
+require 'query'
 
 
 RAILS_DEFAULT_LOGGER.info 'Starting Customer plugin for RedMine'
@@ -19,6 +20,7 @@ Redmine::Plugin.register :customer_plugin do
   url 'https://projects.littlestreamsoftware.com/projects/redmine-customers' if respond_to? :url
   author_url 'http://www.littlestreamsoftware.com' if respond_to? :author_url
 
+  Query.add_available_column QueryColumn.new(:client, :sortable => "#{Client.table_name}.name", :groupable => true)
 
   project_module :customer_module do
     permission :view_client, {:clients => [:show]}

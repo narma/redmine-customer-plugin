@@ -9,6 +9,7 @@ en:
   label_client_assign: Assign
   label_client_list: List
   label_client_new: New
+  field_client: Client
   field_client_name: Name
   field_client_company: Company
   field_client_address: Address
