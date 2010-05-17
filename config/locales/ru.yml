@@ -9,7 +9,11 @@ ru:
   label_client_assign: Assign
   label_client_list: List
   label_client_new: New
+  label_client_select: Клиент
+  label_client_show: Клиент
+  label_client_ip: Ip адрес
   field_client: Клиент
+  field_client_ip: Ip адрес
   field_client_name: Название
   field_client_company: Company
   field_client_address: Address

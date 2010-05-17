@@ -1,12 +1,11 @@
 # Redmine customer plugin
 require 'redmine'
 
-
 require_dependency 'customer_extensions/project'
 require_dependency 'customer_extensions/issue'
 require_dependency 'customer_extensions/issues_controller_patch'
 require_dependency 'customer_extensions/issues_hook'
-require 'query'
+#require_dependency 'customer_extensions/query'
 
 
 RAILS_DEFAULT_LOGGER.info 'Starting Customer plugin for RedMine'
@@ -26,6 +25,7 @@ Redmine::Plugin.register :customer_plugin do
     permission :view_client, {:clients => [:show]}
     permission :see_client_list, {:clients => [:list]}
     permission :edit_client, {:clients => [:edit, :update, :new, :create, :destroy]}
+    permission :rpc_client, {:clients => [:rpc_get, :rpc_new]}
   end
 
   menu :project_menu, :clients, {:controller => 'clients', :action => 'show'}, :caption => :client_title

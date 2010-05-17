@@ -7,9 +7,13 @@ en:
   label_client_assign_to_project: Assign client to Project
   label_client_view: View
   label_client_assign: Assign
+  label_client_select: Client
   label_client_list: List
+  label_client_show: Client
   label_client_new: New
+  label_client_ip: Ip addr
   field_client: Client
+  field_client_ip: Ip addr
   field_client_name: Name
   field_client_company: Company
   field_client_address: Address

@@ -17,6 +17,7 @@
         </span>
       </p>
       <span style="display:none;" id="client-<%=client.id%>">
+        <p> <%= l(:field_client_ip)%>: <%= h client.ip %> </p>
         <p> <%= l(:field_client_address) %>: <%= h client.address %> </p>
         <p> <%= l(:field_client_phone) %>: <%= h client.phone %> </p>
         <p> <%= l(:field_client_email) %>: <%= mail_to client.email unless client.email.blank? %> </p>

@@ -23,11 +23,11 @@ class ClientIssuesHook < Redmine::Hook::ViewListener
       if detail.prop_key == 'client_id'
         if detail.old_value
           client = Client.find(detail.old_value)
-          detail.old_value = client.first_name + ", " + client.last_name
+          detail.old_value = client.name
         end
         if detail.value
           client = Client.find(detail.value)
-          detail.value = client.first_name + ", " + client.last_name
+          detail.value = client.name
         end
         detail.save!
       end
