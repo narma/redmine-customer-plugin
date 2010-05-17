@@ -22,7 +22,8 @@ class ClientsController < ApplicationController
       "created_on" => s.created_on,
       "subject" => s.subject,
       "description" => s.description,
-      "custom_fields" => s.custom_field_values.collect { |c| c.value }
+      "contact" => s.custom_field_values.find { |c| c.custom_field.name=="Контакт клиента" }.value,
+      "text" => s.custom_field_values.find { |c| c.custom_field.name=="Описание от клиента" }.value,
       }},
       :layout => false
   end
