@@ -21,8 +21,18 @@ A copy of the released version can be downloaded from {Little Stream Software}[h
 4. Setup the permissions for your roles
 5. Add the "Customer module" to the enabled modules for your project
 6. The link to the plugin should appear on that project's navigation as Customer
+
 7. Optional, patch app/models/query.rb Query class, add "client_id" => { :type => :list_optional, :order => 17, :values => Client.all.collect{|s| [s.name, s.id.to_s] } }
    to available_filters
+8. patch issues_helpers.rb, method render_custom_fields_rows
+      <pre>
+      s << "</tr>\n<tr>\n" if n > 0 && (n % 2) == 0
+      if value.custom_field.field_format != 'wiki'
+        s << "\t<th>#{ h(value.custom_field.name) }:</th><td>#{ simple_format_without_paragraph(h(show_value(value))) }</td>\n"
+      else
+        s << "\t<th>#{ h(value.custom_field.name) }:</th><td>#{ show_value(value) }</td>\n"
+      end
+      </pre>
 
 == Usage
 

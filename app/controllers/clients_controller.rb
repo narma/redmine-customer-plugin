@@ -2,14 +2,16 @@ class ClientsController < ApplicationController
   unloadable
   layout 'base'
   before_filter :find_project
-  before_filter :authorize, :except => [:rpc_get, :rpc_new]
+  before_filter :authorize, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :find_client, :only => [:edit, :update, :destroy]
   before_filter :find_clients, :only => [:list, :select]
-  before_filter :find_client_by_ip, :only => [:rpc_get, :rpc_new]
 
-  skip_before_filter :verify_authenticity_token, :only => :rpc_new
+  before_filter :find_client_by_ip, :only => [:rpc_get, :rpc_new, :rpc_upd]
+  before_filter :find_issue, :only => :rpc_upd
 
-  verify :method => :post, :only => :rpc_new, :render => {:nothing => true, :status => :method_not_allowed }
+  skip_before_filter :verify_authenticity_token, :only => [:rpc_new, :rpc_upd]
+
+  verify :method => :post, :only => [:rpc_new, :rpc_upd], :render => {:nothing => true, :status => :method_not_allowed }
 
   def show
     @clients = @project.clients
@@ -17,38 +19,65 @@ class ClientsController < ApplicationController
 
 
   def rpc_get
-      render :json => @project.issues.all(:conditions => {:client_id => @client}).collect { |s|
-      {"id" => s.id,
-      "created_on" => s.created_on,
-      "subject" => s.subject,
-      "description" => s.description,
-      "contact" => s.custom_field_values.find { |c| c.custom_field.name=="Контакт клиента" }.value,
-      "text" => s.custom_field_values.find { |c| c.custom_field.name=="Описание от клиента" }.value,
+      condition = {:client_id => @client}
+      if params[:issue_id]
+        condition[:id] = params[:issue_id]
+      end
+
+      render :json => @project.issues.all(:conditions => condition).collect { |s|
+      {
+        "id" => s.id,
+        "created_on" => s.created_on,
+        "start_date" => s.start_date,
+        "subject" => s.subject,
+        "description" => s.description,
+        "tracker" => s.tracker.name,
+        "status" => s.status.id,
+        "done_ratio" => s.done_ratio,
+        "comments" => s.journals.all(:conditions => "notes <> '' AND client_visible = 1").collect {
+          |c| {
+                "comment" => c.notes,
+                "author" => c.user.name,
+                "created_on" => c.created_on
+              }
+         },
+        "status_txt" => s.status.name,
+        "contact" => s.custom_field_values.find { |c| c.custom_field.name=="Контакт клиента" }.value,
+        "text" => s.custom_field_values.find { |c| c.custom_field.name=="Описание от клиента" }.value,
       }},
       :layout => false
   end
 
   def rpc_new
-     if request.post?
-       issue = @project.issues.build(
-         :client_id => @client,
-         :subject => params[:subject],
-         :description => params[:description],
-         :created_on => DateTime.now,
-         :author => User.find_by_login('rpc'),
-         :tracker => Tracker.first
-       )
+     issue = @project.issues.build(
+       :client_id => @client,
+       :subject => params[:subject],
+       :description => params[:description],
+       :created_on => DateTime.now,
+       :author => User.find_by_login('rpc'),
+       :tracker => Tracker.first
+     )
 
-       contact_field = IssueCustomField.find_by_name('Контакт клиента')
-       text_field = IssueCustomField.find_by_name('Описание от клиента')
+     contact_field = IssueCustomField.find_by_name('Контакт клиента')
+     text_field = IssueCustomField.find_by_name('Описание от клиента')
 
-       issue.custom_field_values = {
-          contact_field.id => params[:contact],
-          text_field.id => params[:text]
-       }
-       ok = issue.save
-       render :text => ok, :layout => false
-     end
+     issue.custom_field_values = {
+        contact_field.id => params[:contact],
+        text_field.id => params[:text]
+     }
+     ok = issue.save
+     render :text => ok, :layout => false
+  end
+
+  def rpc_upd
+      case params[:issue_action].downcase
+      when 'close', 'cancel'
+        @issue.status = IssueStatus.find(:first, :conditions => { :is_closed => true } )
+      when 'reopen'
+        @issue.status = IssueStatus.find(:first, :conditions => { :is_default => true } )
+      end
+      @issue.save
+      render :text => 'ok', :layout => false
   end
 
   def list
@@ -91,13 +120,19 @@ class ClientsController < ApplicationController
     @client = @project.clients.build(params[:client])
     if @client.save
       flash[:notice] = l(:notice_successful_create)
-      redirect_to :action => "select", :id => params[:id]
+      redirect_to :action => "show", :id => params[:id]
     else
       render :action => "new", :id => params[:id]
     end
   end
 
   private
+
+  def find_issue
+    @issue = Issue.find(params[:issue_id])
+  rescue ActiveRecord::RecordNotFound
+    render :json => false, :layout => false
+  end
 
   def find_project
     @project = Project.find(params[:id])
