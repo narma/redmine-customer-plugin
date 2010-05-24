@@ -150,9 +150,12 @@ class ClientsController < ApplicationController
   end
 
   def find_client_by_ip
-    @client = Client.find_by_ip(request.remote_ip) || render :text => nil, :layout => false
+    @client = Client.find_by_ip(request.remote_ip)
+    if not @client
+      render :json => nil, :layout => false
+    end
   rescue ActiveRecord::RecordNotFound
-    render :text => nil, :layout => false
+    render :json => nil, :layout => false
   end
 
   def find_clients
