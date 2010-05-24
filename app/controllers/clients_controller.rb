@@ -44,8 +44,8 @@ class ClientsController < ApplicationController
               }
          },
         "status_txt" => s.status.name,
-        "contact" => s.custom_field_values.find { |c| c.custom_field.name=="Контакт клиента" }.value,
-        "text" => s.custom_field_values.find { |c| c.custom_field.name=="Описание от клиента" }.value,
+        "contact" => s.custom_field_values.select { |c| c.custom_field.name=="Контакт клиента" } .collect { |v| v.value },
+        "text" => s.custom_field_values.select { |c| c.custom_field.name=="Описание от клиента" } .collect { |v| v.value },
       }}],
       :layout => false
   end
