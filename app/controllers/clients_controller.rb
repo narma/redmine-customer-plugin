@@ -24,7 +24,9 @@ class ClientsController < ApplicationController
         condition[:id] = params[:issue_id]
       end
 
-      render :json => @project.issues.all(:conditions => condition).collect { |s|
+      render :json => [
+      Tracker.all.collect { |t| {t.id => t.name } },
+      @project.issues.all(:conditions => condition).collect { |s|
       {
         "id" => s.id,
         "created_on" => s.created_on,
@@ -44,7 +46,7 @@ class ClientsController < ApplicationController
         "status_txt" => s.status.name,
         "contact" => s.custom_field_values.find { |c| c.custom_field.name=="Контакт клиента" }.value,
         "text" => s.custom_field_values.find { |c| c.custom_field.name=="Описание от клиента" }.value,
-      }},
+      }}],
       :layout => false
   end
 
@@ -55,7 +57,7 @@ class ClientsController < ApplicationController
        :description => params[:description],
        :created_on => DateTime.now,
        :author => User.find_by_login('rpc'),
-       :tracker => Tracker.first
+       :tracker => Tracker.find(params[:tracker])
      )
 
      contact_field = IssueCustomField.find_by_name('Контакт клиента')
