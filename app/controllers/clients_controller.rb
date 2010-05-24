@@ -3,6 +3,7 @@ class ClientsController < ApplicationController
   layout 'base'
   before_filter :find_project
   before_filter :authorize, :except => [:rpc_get, :rpc_new, :rpc_upd]
+  before_filter :check_if_login_required, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :find_client, :only => [:edit, :update, :destroy]
   before_filter :find_clients, :only => [:list, :select]
 
