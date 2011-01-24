@@ -35,5 +35,6 @@ Redmine::Plugin.register :customer_plugin do
   end
 
   menu :project_menu, :clients, {:controller => 'clients', :action => 'show'}, :caption => :client_title
+  menu :account_menu, :quick_issue, {:controller => 'issues', :action => 'new', :project_id => 'pyzzle', :quick => true}, :caption => :issue_new_quick, :if => Proc.new { User.current.logged? }, :last => true
 end
 

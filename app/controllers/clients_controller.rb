@@ -53,7 +53,7 @@ class ClientsController < ApplicationController
 
   def rpc_new
      issue = @project.issues.build(
-       :client_id => @client,
+       :client_id => @client.id,
        :subject => params[:subject],
        :description => params[:description],
        :created_on => DateTime.now,
@@ -78,6 +78,9 @@ class ClientsController < ApplicationController
         @issue.status = IssueStatus.find(:first, :conditions => { :is_closed => true } )
       when 'reopen'
         @issue.status = IssueStatus.find(:first, :conditions => { :is_default => true } )
+      when 'comment'
+        j = @issue.journals.new :user => User.find_by_login('rpc'), :notes => "#{params[:author]}\n#{params[:notes]}", :client_visible => true
+	j.save
       end
       @issue.save
       render :text => 'ok', :layout => false

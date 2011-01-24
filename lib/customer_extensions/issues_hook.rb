@@ -1,8 +1,17 @@
 class ClientIssuesHook < Redmine::Hook::ViewListener
 
+  def view_issues_form_details_top(context = {})
+    if context[:params][:quick]
+      controller = context[:controller]
+      controller.send(:render_to_string, :partial => "select_clients")
+    end
+  end
+
   def view_issues_form_details_bottom(context = {})
-    controller = context[:controller]
-    controller.send(:render_to_string, :partial => "select_clients")
+    unless context[:params][:quick]
+      controller = context[:controller]
+      controller.send(:render_to_string, :partial => "select_clients")
+    end
   end
 
   def controller_issues_new_before_save(context = {})

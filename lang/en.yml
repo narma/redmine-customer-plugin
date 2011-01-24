@@ -15,6 +15,7 @@ field_client_phone: Phone
 field_client_email: Email
 field_client_website: Website
 field_client_skype: Skype
+issue_new_quick: Quick issue
 notice_successful_save: Saved
 notice_unsuccessful_save: Could not save
 
