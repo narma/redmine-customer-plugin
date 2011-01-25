@@ -1,6 +1,11 @@
 class ClientsController < ApplicationController
   unloadable
+
+  helper :clients
+  include FindFilters
+
   layout 'base'
+
   before_filter :find_project
   before_filter :authorize, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :check_if_login_required, :except => [:rpc_get, :rpc_new, :rpc_upd]
@@ -80,7 +85,7 @@ class ClientsController < ApplicationController
         @issue.status = IssueStatus.find(:first, :conditions => { :is_default => true } )
       when 'comment'
         j = @issue.journals.new :user => User.find_by_login('rpc'), :notes => "#{params[:author]}\n#{params[:notes]}", :client_visible => true
-	j.save
+        j.save
       end
       @issue.save
       render :text => 'ok', :layout => false
@@ -130,39 +135,6 @@ class ClientsController < ApplicationController
     else
       render :action => "new", :id => params[:id]
     end
-  end
-
-  private
-
-  def find_issue
-    @issue = Issue.find(params[:issue_id])
-  rescue ActiveRecord::RecordNotFound
-    render :json => false, :layout => false
-  end
-
-  def find_project
-    @project = Project.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
-  end
-
-  def find_client
-    @client = Client.find_by_id(params[:client_id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
-  end
-
-  def find_client_by_ip
-    @client = Client.find_by_ip(request.remote_ip)
-    if not @client
-      render :json => nil, :layout => false
-    end
-  rescue ActiveRecord::RecordNotFound
-    render :json => nil, :layout => false
-  end
-
-  def find_clients
-    @clients = Client.find(:all) || []
   end
 
 end
