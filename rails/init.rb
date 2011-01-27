@@ -3,6 +3,7 @@ require 'redmine'
 
 require_dependency 'customer_extensions/project'
 require_dependency 'customer_extensions/issue'
+require_dependency 'customer_extensions/query'
 require_dependency 'customer_extensions/issues_controller_patch'
 require_dependency 'customer_extensions/issues_hook'
 require_dependency 'customer_extensions/journals_hook'
