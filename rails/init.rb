@@ -21,6 +21,11 @@ Redmine::Plugin.register :customer_plugin do
   url 'https://projects.littlestreamsoftware.com/projects/redmine-customers' if respond_to? :url
   author_url 'http://www.littlestreamsoftware.com' if respond_to? :author_url
 
+  settings :default => {
+    'clients_project' => Project.first,
+  }, :partial => 'settings/customer_plugin_settings'
+
+
   Query.add_available_column QueryColumn.new(:client, :sortable => "#{Client.table_name}.name", :groupable => true)
 
   Redmine::CustomFieldFormat.map do |fields|
@@ -37,4 +42,23 @@ Redmine::Plugin.register :customer_plugin do
   menu :project_menu, :clients, {:controller => 'clients', :action => 'show'}, :caption => :client_title
   menu :account_menu, :quick_issue, {:controller => 'issues', :action => 'new', :project_id => 'pyzzle', :quick => true}, :caption => :issue_new_quick, :if => Proc.new { User.current.logged? }, :last => true
 end
+
+
+module RedmineClientsProjectPatch
+  def self.included(target)
+    target.extend ClassMethods
+  
+    target.class_eval do    
+      def clients_project
+        @project = Project.find @settings['clients_project']
+      end
+    end
+
+  end
+
+  module ClassMethods
+  end
+
+end
+ApplicationHelper.send(:include, RedmineClientsProjectPatch)
 

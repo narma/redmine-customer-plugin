@@ -1,2 +1,2 @@
-<p><label><%= l(:label_client_select) %></label><%= select :issue, :client_id, @project.clients.collect {|s| [s.name, s.id]}, {:include_blank => true} %></p>
+<p><label><%= l(:label_client_select) %></label><%= select :issue, :client_id, Client.find(:all).collect {|s| [s.name, s.id]}, {:include_blank => true} %></p>
 

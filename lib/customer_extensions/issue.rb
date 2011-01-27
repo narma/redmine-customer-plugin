@@ -9,7 +9,6 @@ module CustomerExtensions
 
       base.class_eval do
         belongs_to :client
-        belongs_to :customer
       end
     end
 

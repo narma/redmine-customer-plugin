@@ -20,7 +20,7 @@ class ClientsController < ApplicationController
   verify :method => :post, :only => [:rpc_new, :rpc_upd], :render => {:nothing => true, :status => :method_not_allowed }
 
   def show
-    @clients = @project.clients
+    @clients = Client.find :all
   end
 
 
@@ -32,7 +32,7 @@ class ClientsController < ApplicationController
 
       render :json => [
       Tracker.all.collect { |t| {t.id => t.name } },
-      @project.issues.all(:conditions => condition).collect { |s|
+      clients_project.issues.all(:conditions => condition).collect { |s|
       {
         "id" => s.id,
         "created_on" => s.created_on,
@@ -57,7 +57,7 @@ class ClientsController < ApplicationController
   end
 
   def rpc_new
-     issue = @project.issues.build(
+     issue = clients_project.issues.build(
        :client_id => @client.id,
        :subject => params[:subject],
        :description => params[:description],
@@ -128,7 +128,7 @@ class ClientsController < ApplicationController
   end
 
   def create
-    @client = @project.clients.build(params[:client])
+    @client = clients_project.clients.build(params[:client])
     if @client.save
       flash[:notice] = l(:notice_successful_create)
       redirect_to :action => "show", :id => params[:id]

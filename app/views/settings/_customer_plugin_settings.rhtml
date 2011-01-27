@@ -1,0 +1,3 @@
+<p><label><%= l(:label_project) %></label><%= select_tag 'settings[clients_project]', project_tree_options_for_select(Project.find(:all), :selected => clients_project ) %></p>
+
+

@@ -7,9 +7,6 @@ module CustomerExtensions
     def self.included(base)
       base.extend ClassMethods
 
-      base.class_eval do
-        has_many :clients
-      end
     end
 
     module ClassMethods
