@@ -19,6 +19,24 @@ module CustomerExtensions
 
         alias_method_chain :available_filters, :client
 
+        def estimated_sum_by_group
+          r = nil
+          if grouped?
+            begin
+              r = ::Issue.sum 'ROUND(estimated_hours, 2)', :group => group_by_statement, :include => [:client, :status, :project], :conditions => statement
+            rescue ActiveRecord::RecordNotFound
+              r = {nil => 0}
+            end
+
+            c = group_by_column
+            if c.is_a?(QueryCustomFieldColumn)
+              r = r.keys.inject({}) {|h, k| h[c.custom_field.cast_value(k)] = r[k]; h}
+            end
+          end
+          r
+       end
+
+
       end
    end
 
