@@ -23,6 +23,9 @@ class ClientsController < ApplicationController
     @clients = Client.find :all
   end
 
+  def clients_project
+    Project.find Setting["plugin_customer_plugin"]["clients_project"]
+  end
 
   def rpc_get
       condition = {:client_id => @client}
