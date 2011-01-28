@@ -6,7 +6,6 @@ class ClientsController < ApplicationController
 
   layout 'base'
 
-  before_filter :find_project
   before_filter :authorize, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :check_if_login_required, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :find_client, :only => [:edit, :update, :destroy]
@@ -45,6 +44,7 @@ class ClientsController < ApplicationController
         "tracker" => s.tracker.name,
         "status" => s.status.id,
         "done_ratio" => s.done_ratio,
+        "spent_hours" => s.estimated_hours,
         "comments" => s.journals.all(:conditions => "notes <> '' AND client_visible = 1").collect {
           |c| {
                 "comment" => c.notes,
