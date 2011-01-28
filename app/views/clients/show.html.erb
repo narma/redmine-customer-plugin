@@ -11,17 +11,20 @@
   <% @clients.each do |client| %>
     <div class="box">
       <p>
-        <%= l(:field_client_name) %>: <%= h client.name %>
-        <span class="details-link small-text">
-          <%= link_to_function "Details", "$('client-#{client.id}').toggle()" %>
-        </span>
-      </p>
-      <span style="display:none;" id="client-<%=client.id%>">
-        <p> <%= l(:field_client_ip)%>: <%= h client.deploy_ips %> </p>
+       <%= h client.name %>
+      <span id="client-<%=client.id%>">
+        <%= l(:field_client_ip)%>:<br/>
+       
+        <ul> 
+        <% h client.ip_list.each do |ip| %>
+            <li><%= ip %>
+        <% end %>
+        </ul>
         <p> <%= l(:field_client_support_hours) %>: <%= h client.support_hours %> </p>
       </span>
+     </p>
     </div>
-    <br/><br/>
+    <br/>
   <% end %>
 <% else %>
   <p class="nodata"><%=l(:label_no_data)%></p>

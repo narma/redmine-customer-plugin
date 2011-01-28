@@ -21,7 +21,8 @@ module FindFilters
   end
 
   def find_client_by_ip
-    @client = Client.find :first, :conditions => {:deploy_ips => request.remote_ip }
+    # TODO: deprecated, use keys instead
+    @client = (Client.all.select{ |c| c.ip_list.include?(request.remote_ip) }).first
     if not @client
       render :json => nil, :layout => false
     end

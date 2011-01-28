@@ -6,5 +6,9 @@ class Client < ActiveRecord::Base
     "#{name}"
   end
 
+  def ip_list
+    deploy_ips and deploy_ips.split or []
+  end
+
 end
 

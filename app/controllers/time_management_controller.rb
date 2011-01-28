@@ -5,7 +5,6 @@ class TimeManagementController < ApplicationController
   include FindFilters
 
   layout 'base'
-  before_filter :find_project
   before_filter :authorize, :except => [:rpc_get_spent_hours]
   before_filter :check_if_login_required, :except => [:rpc_get_spent_hours]
 
