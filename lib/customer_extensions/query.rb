@@ -21,24 +21,29 @@ module CustomerExtensions
 
         def estimated_sum_by_group
           r = nil
+          result = {}
           if grouped?
-            begin
-              r = ::Issue.sum 'ROUND(estimated_hours, 2)', :group => group_by_statement, :include => [:client, :status, :project], :conditions => statement
-            rescue ActiveRecord::RecordNotFound
-              r = {nil => 0}
-            end
+            Tracker.all.each do |t|
+              begin
+                  new_cond = ::Issue.merge_conditions statement, "tracker_id=#{t.id}"
+                  r = ::Issue.sum 'ROUND(estimated_hours, 2)', :group => group_by_statement, :include => [:client, :status, :project], :conditions => new_cond
+              rescue ActiveRecord::RecordNotFound
+                  r = {nil => 0}
+              end
 
-            c = group_by_column
-            if c.is_a?(QueryCustomFieldColumn)
-              r = r.keys.inject({}) {|h, k| h[c.custom_field.cast_value(k)] = r[k]; h}
+              c = group_by_column
+              if c.is_a?(QueryCustomFieldColumn)
+                r = r.keys.inject({}) {|h, k| h[c.custom_field.cast_value(k)] = r[k]; h}
+              end
+              result[t.id] = r
             end
+            result
           end
-          r
+
        end
-
-
-      end
-   end
+     end
+    end
+     
 
     module ClassMethods
     end
@@ -47,5 +52,3 @@ module CustomerExtensions
 end
 
 Query.send(:include, CustomerExtensions::Query)
-
-
