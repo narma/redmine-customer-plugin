@@ -8,10 +8,10 @@ class ClientsController < ApplicationController
 
   before_filter :authorize, :except => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :check_if_login_required, :except => [:rpc_get, :rpc_new, :rpc_upd]
-  before_filter :find_client, :only => [:edit, :update, :destroy]
+  before_filter :find_client_by_id, :only => [:edit, :update, :destroy]
   before_filter :find_clients, :only => [:list, :select]
 
-  before_filter :find_client_by_ip, :only => [:rpc_get, :rpc_new, :rpc_upd]
+  before_filter :find_client, :only => [:rpc_get, :rpc_new, :rpc_upd]
   before_filter :find_issue, :only => :rpc_upd
 
   skip_before_filter :verify_authenticity_token, :only => [:rpc_new, :rpc_upd]

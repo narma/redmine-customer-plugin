@@ -14,24 +14,22 @@ module FindFilters
     render :json => false, :layout => false
   end
 
-  def find_client
+  def find_client_by_id
     begin
-      @client = Client.find_by_private_key(params[:iam])
-      if not @client then
-        if params[:client_id] then
-          @client = Client.find_by_id(params[:client_id])
-        end
-      end
+      @client = Client.find_by_id(params[:client_id])
     rescue ActiveRecord::RecordNotFound
       render_404
     end
   end
 
-  def find_client_by_ip
-    # TODO: deprecated, use keys instead
-    @client = (Client.all.select{ |c| c.ip_list.include?(request.remote_ip) }).first
-    if not @client
-      render :json => nil, :layout => false
+  def find_client
+    @client = Client.find_by_private_key(params[:iam])
+    if not @client then
+      # TODO: deprecated, use keys instead
+      @client = (Client.all.select{ |c| c.ip_list.include?(request.remote_ip) }).first
+      if not @client
+        render :json => nil, :layout => false
+      end
     end
   rescue ActiveRecord::RecordNotFound
     render :json => nil, :layout => false
