@@ -1,6 +1,11 @@
 # Redmine customer plugin
 require 'redmine'
 
+require_dependency 'issue'
+require_dependency 'query'
+require_dependency 'project'
+
+
 require_dependency 'customer_extensions/project'
 require_dependency 'customer_extensions/issue'
 require_dependency 'customer_extensions/query'
@@ -8,6 +13,7 @@ require_dependency 'customer_extensions/issues_controller_patch'
 require_dependency 'customer_extensions/issues_hook'
 require_dependency 'customer_extensions/journals_hook'
 require_dependency 'customer_extensions/custom_field_format_patch'
+
 #require_dependency 'customer_extensions/query'
 
 
@@ -42,14 +48,21 @@ Redmine::Plugin.register :customer_plugin do
 
   menu :project_menu, :clients, {:controller => 'clients', :action => 'show'}, :caption => :client_title
   menu :account_menu, :quick_issue, {:controller => 'issues', :action => 'new', :project_id => 'pyzzle', :quick => true}, :caption => :issue_new_quick, :if => Proc.new { User.current.logged? }, :last => true
+
+
+  Issue.send(:include, CustomerExtensions::Issue)
+  Redmine::CustomFieldFormat.send(:include, CustomerExtensions::CustomFieldFormat)
+  IssuesController.send(:include, CustomerExtensions::IssuesController)
+  Project.send(:include, CustomerExtensions::Project)
+  Query.send(:include, CustomerExtensions::Query)
 end
 
 
 module RedmineClientsProjectPatch
   def self.included(target)
     target.extend ClassMethods
-  
-    target.class_eval do    
+
+    target.class_eval do
       def clients_project
         @project = Project.find @settings['clients_project']
       end
@@ -62,4 +75,3 @@ module RedmineClientsProjectPatch
 
 end
 ApplicationHelper.send(:include, RedmineClientsProjectPatch)
-

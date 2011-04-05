@@ -16,5 +16,5 @@ module CustomerExtensions
   end
 end
 
-IssuesController.send(:include, CustomerExtensions::IssuesController)
+
 

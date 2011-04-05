@@ -15,9 +15,15 @@ module FindFilters
   end
 
   def find_client
-    @client = Client.find_by_id(params[:client_id])
-  rescue ActiveRecord::RecordNotFound
-    render_404
+    begin
+      @client = Client.find_by_private_key(params[:iam])
+      if not @client then
+        if params[:client_id] then
+          @client = Client.find_by_id(params[:client_id])
+        end
+      end
+    rescue ActiveRecord::RecordNotFound
+      render_404
   end
 
   def find_client_by_ip

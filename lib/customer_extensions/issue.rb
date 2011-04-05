@@ -1,13 +1,10 @@
-require_dependency 'issue'
-
-
 module CustomerExtensions
   module Issue
 
     def self.included(base)
       base.extend ClassMethods
 
-      base.class_eval do
+      base.instance_eval do
         belongs_to :client
       end
     end
@@ -16,6 +13,4 @@ module CustomerExtensions
     end
   end
 end
-
-Issue.send(:include, CustomerExtensions::Issue)
 

@@ -1,4 +1,4 @@
-require_dependency 'query'
+
 
 
 module CustomerExtensions
@@ -6,7 +6,7 @@ module CustomerExtensions
 
     def self.included(base)
       base.extend ClassMethods
-      
+
       base.class_eval do
         def available_filters_with_client
           available_filters_without_client
@@ -43,7 +43,7 @@ module CustomerExtensions
        end
      end
     end
-     
+
 
     module ClassMethods
     end
@@ -51,4 +51,4 @@ module CustomerExtensions
   end
 end
 
-Query.send(:include, CustomerExtensions::Query)
+

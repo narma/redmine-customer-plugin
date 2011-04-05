@@ -19,5 +19,3 @@ module CustomerExtensions
   end
 end
 
-Redmine::CustomFieldFormat.send(:include, CustomerExtensions::CustomFieldFormat)
-

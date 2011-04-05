@@ -1,6 +1,3 @@
-require_dependency 'project'
-
-
 module CustomerExtensions
   module Project
 
@@ -14,5 +11,5 @@ module CustomerExtensions
   end
 end
 
-Project.send(:include, CustomerExtensions::Project)
+
 
