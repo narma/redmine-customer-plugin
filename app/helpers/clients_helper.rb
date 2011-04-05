@@ -24,6 +24,7 @@ module FindFilters
       end
     rescue ActiveRecord::RecordNotFound
       render_404
+    end
   end
 
   def find_client_by_ip
