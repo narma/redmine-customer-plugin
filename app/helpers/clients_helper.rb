@@ -25,11 +25,7 @@ module FindFilters
   def find_client
     @client = Client.find_by_private_key(params[:iam])
     if not @client then
-      # TODO: deprecated, use keys instead
-      @client = (Client.all.select{ |c| c.ip_list.include?(request.remote_ip) }).first
-      if not @client
-        render :json => nil, :layout => false
-      end
+      render :json => nil, :layout => false
     end
   rescue ActiveRecord::RecordNotFound
     render :json => nil, :layout => false
