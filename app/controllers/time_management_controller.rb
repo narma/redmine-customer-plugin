@@ -19,14 +19,7 @@ class TimeManagementController < ApplicationController
   def rpc_get_base_info
     status_closed = IssueStatus.find :first, :conditions => { :is_closed => true }
     conditions = { :client_id => @client, :status_id => status_closed }
-    {:start => '>', :end => '<'}.each { |key,seq|
-      begin
-        if params.include? key
-          conditions = Issue.merge_conditions(conditions, ["created_on #{seq} ?", params[key]])
-        end
-      rescue
-      end
-    }
+    conditions = Issue.merge_conditions(conditions, ["created_on > ?", DateTime.now.beginning_of_month])
 
     spent_hours = Issue.sum(:estimated_hours, :conditions => conditions).round 3
     support_hours = 0
