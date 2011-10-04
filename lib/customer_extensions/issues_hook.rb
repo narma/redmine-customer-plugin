@@ -1,14 +1,14 @@
 class ClientIssuesHook < Redmine::Hook::ViewListener
 
   def view_issues_form_details_top(context = {})
-    if context[:params][:quick]
+    if context[:params] and context[:params][:quick]
       controller = context[:controller]
       controller.send(:render_to_string, :partial => "select_clients")
     end
   end
 
   def view_issues_form_details_bottom(context = {})
-    unless context[:params][:quick]
+    if not context[:params] or not context[:params][:quick]
       controller = context[:controller]
       controller.send(:render_to_string, :partial => "select_clients")
     end
